@@ -32,8 +32,7 @@ class Web3StorageSource {
     final file = RawFile(
       name: "PiciNFT #1 Data",
       extension: 'json',
-      data: Uint8List.fromList(utf8.encode(json.encode(jsonData!))),
-      // data: json.decode(dataCID),
+      data: Uint8List.fromList(jsonData!.codeUnits),
     );
 
     final result = await web3Storage.upload(file: file);
