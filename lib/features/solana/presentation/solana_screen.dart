@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pici_nft/core/utils/app_strings.dart';
 
 import '../../../core/presentation/widgets/custom_text_field.dart';
+import '../../../core/routes.dart';
 import '../domain/NFT_attribute_entity.dart';
 import '../domain/metadata_NFT.dart';
 import 'cubit/phantom_wallet_cubit.dart';
@@ -44,6 +45,16 @@ class _SolanaScreenState extends State<SolanaScreen> {
         title: const Center(
           child: Text(AppStrings.solanaAppTitle),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<Web3StorageCubit>().clear();
+
+              Navigator.popAndPushNamed(context, Routes.solana);
+            },
+            icon: const Icon(Icons.add_photo_alternate_outlined),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -51,8 +62,6 @@ class _SolanaScreenState extends State<SolanaScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              //!SECTION Use timelines for this app
-              //ANCHOR - Image Timeline
               SizedBox(
                 height: MediaQuery.of(context).size.height * (0.01),
               ),
@@ -75,9 +84,6 @@ class _SolanaScreenState extends State<SolanaScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * (0.03),
               ),
-
-              //ANCHOR - Extra Data timeline
-              //ANCHOR - Create and Build buttons
             ]),
       ),
     );

@@ -93,4 +93,9 @@ class Web3StorageCubit extends Cubit<Web3StorageState> {
 
     return permissionGranted;
   }
+
+  void clear() {
+    emit(Web3StorageImageInitial());
+    data = null;
+  }
 }
