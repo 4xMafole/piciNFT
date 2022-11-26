@@ -8,6 +8,8 @@ import 'package:file_picker/file_picker.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../domain/NFT_attribute_entity.dart';
+
 @immutable
 abstract class Web3StorageState {}
 
@@ -15,9 +17,16 @@ class Web3StorageInitial extends Web3StorageState {}
 
 class Web3StorageInProgress extends Web3StorageState {}
 
-class Web3StorageSuccess extends Web3StorageState {
+class Web3StorageDataInProgress extends Web3StorageState {}
+
+class Web3StorageImageSuccess extends Web3StorageState {
   final String data;
-  Web3StorageSuccess(this.data);
+  Web3StorageImageSuccess(this.data);
+}
+
+class Web3StorageDataSuccess extends Web3StorageState {
+  final String data;
+  Web3StorageDataSuccess(this.data);
 }
 
 class Web3StorageFailure extends Web3StorageState {
@@ -35,8 +44,29 @@ class Web3StorageCubit extends Cubit<Web3StorageState> {
     emit(Web3StorageInProgress());
     _repository
         .uploadImage(image)
-        .then((value) => emit(Web3StorageSuccess(value)))
+        .then((value) => emit(Web3StorageImageSuccess(value)))
         .catchError((e) => emit(Web3StorageFailure(e.toString())));
+  }
+
+  void uploadData(
+      {required String image,
+      required String name,
+      required String description,
+      required List<NFTAttributeEntity> attributes}) {
+    emit(Web3StorageDataInProgress());
+
+    data = NFTEntity(
+      name: name,
+      description: description,
+      image: image,
+      attributes: attributes,
+    );
+
+    _repository.uploadData(data!).then((dataUrl) {
+      emit(Web3StorageDataSuccess(dataUrl));
+    }).catchError((e) {
+      emit(Web3StorageFailure(e.toString()));
+    });
   }
 
   Future<void> getImageFromGallery() async {
