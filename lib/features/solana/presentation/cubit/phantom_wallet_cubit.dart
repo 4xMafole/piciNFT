@@ -117,7 +117,7 @@ class PhantomWalletCubit extends Cubit<PhantomWalletState> {
               } else if (_signCounter == 3) {
                 _createMetadataAccount();
               } else if (_signCounter == 4) {
-                _removeMintAuthority();
+                // _removeMintAuthority(); MUTED
                 emit(PhantomWalletSuccess("NFT Minted Successfully!"));
               }
 
