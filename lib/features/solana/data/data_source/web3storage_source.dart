@@ -13,7 +13,7 @@ class Web3StorageSource {
     final web3Storage = withApiToken(apiToken);
 
     final file = RawFile(
-      name: "PiciNFT #2",
+      name: "PiciNFT #1",
       extension: 'jpg',
       data: imageFile!.readAsBytesSync(),
     );
@@ -21,7 +21,6 @@ class Web3StorageSource {
     final result = await web3Storage.upload(file: file);
 
     result.fold((l) => l.stackTrace, (r) => imageCID = r.cid);
-    print('https://w3s.link/ipfs/$imageCID');
     return 'https://w3s.link/ipfs/$imageCID';
   }
 
@@ -39,7 +38,6 @@ class Web3StorageSource {
 
     result.fold((l) => l.stackTrace, (r) => dataCID = r.cid);
 
-    print('https://w3s.link/ipfs/$dataCID');
     return 'https://w3s.link/ipfs/$dataCID';
   }
 }

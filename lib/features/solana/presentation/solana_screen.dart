@@ -10,6 +10,8 @@ import 'package:pici_nft/core/utils/app_strings.dart';
 
 import '../../../core/presentation/widgets/custom_text_field.dart';
 import '../domain/NFT_attribute_entity.dart';
+import '../domain/metadata_NFT.dart';
+import 'cubit/phantom_wallet_cubit.dart';
 import 'cubit/web3storage_cubit.dart';
 
 class SolanaScreen extends StatefulWidget {
@@ -323,89 +325,59 @@ class _SolanaScreenState extends State<SolanaScreen> {
             height: 45,
             child: ElevatedButton(
               onPressed: () {
-                // context.read<PhantomWalletCubit>().mintingNFT(
-                //       MetadataNFT(
-                //         name: nameController.text.trim(),
-                //         symbol: symbolController.text.trim(),
-                //         dataUri: dataUrl,
-                //       ),
-                //     );
+                context.read<PhantomWalletCubit>().mintingNFT(
+                      MetadataNFT(
+                        name: nameController.text.trim(),
+                        symbol: symbolController.text.trim(),
+                        dataUri: dataUrl,
+                      ),
+                    );
               },
               child: const Text(AppStrings.mintNFT),
             ),
           ),
-          // const SizedBox(
-          //   height: 20,
-          // ),
-          // BlocConsumer<MetaplexCubit, MetaplexState>(
-          //   bloc: context.read<MetaplexCubit>(),
-          //   listener: (context, state) {
-          //     if (state is MetaplexSuccess) {
-          //       context.read<ArweaveImageCubit>().clear();
-          //       context.read<ArweaveDataCubit>().clear();
-          //       _showSnackBar(
-          //           context, "NFT signature ${state.output}", 'success');
-          //       context.read<ArweaveImageCubit>().clear();
-          //       context.read<ArweaveDataCubit>().clear();
-          //       Navigator.popAndPushNamed(context, Routes.solana);
-          //     }
-          //   },
-          //   builder: (context, state) {
-          //     if (state is MetaplexInitial) {
-          //       return const SizedBox();
-          //     } else if (state is MetaplexInProgress) {
-          //       return const SizedBox(
-          //         height: 25,
-          //         width: 25,
-          //         child: CircularProgressIndicator(),
-          //       );
-          //     } else if (state is MetaplexFailure) {
-          //       return Text(
-          //         state.errorMessage,
-          //         style: TextStyle(color: Colors.red.shade200),
-          //       );
-          //     }
-          //     return const SizedBox();
-          //   },
-          // ),
-          // BlocBuilder(
-          //     bloc: context.read<PhantomWalletCubit>(),
-          //     builder: (context, state) {
-          //       if (state is PhantomWalletInProgress) {
-          //         return const SizedBox(
-          //           height: 25,
-          //           width: 25,
-          //           child: CircularProgressIndicator(),
-          //         );
-          //       } else if (state is PhantomWalletSignAndSendTransaction) {
-          //         if (state.signCounter == 5) {
-          //           return const Text(
-          //             mintSuccessString,
-          //             style: TextStyle(color: Colors.green),
-          //           );
-          //         }
-          //       } else if (state is PhantomWalletFailure) {
-          //         if (state.errorMessage.contains(walletConnectError)) {
-          //           return TextButton(
-          //             onPressed: () =>
-          //                 context.read<PhantomWalletCubit>().connectWallet(),
-          //             child: Text(
-          //               walletReconnectingString,
-          //               style: TextStyle(color: Colors.blue.shade200),
-          //             ),
-          //           );
-          //         } else {
-          //           return Text(
-          //             state.errorMessage,
-          //             style: TextStyle(color: Colors.red.shade200),
-          //           );
-          //         }
-          //       }
-          //       return const SizedBox();
-          //     }),
-          // const SizedBox(
-          //   height: 20,
-          // ),
+          const SizedBox(
+            height: 20,
+          ),
+
+          BlocBuilder(
+              bloc: context.read<PhantomWalletCubit>(),
+              builder: (context, state) {
+                if (state is PhantomWalletInProgress) {
+                  return const SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is PhantomWalletSignAndSendTransaction) {
+                  if (state.signCounter == 5) {
+                    return const Text(
+                      AppStrings.mintSuccessString,
+                      style: TextStyle(color: Colors.green),
+                    );
+                  }
+                } else if (state is PhantomWalletFailure) {
+                  if (state.errorMessage.contains(AppStrings.walletConnectError)) {
+                    return TextButton(
+                      onPressed: () =>
+                          context.read<PhantomWalletCubit>().connectWallet(),
+                      child: Text(
+                        AppStrings.walletReconnectingString,
+                        style: TextStyle(color: Colors.blue.shade200),
+                      ),
+                    );
+                  } else {
+                    return Text(
+                      state.errorMessage,
+                      style: TextStyle(color: Colors.red.shade200),
+                    );
+                  }
+                }
+                return const SizedBox();
+              }),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );

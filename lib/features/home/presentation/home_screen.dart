@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pici_nft/core/utils/app_dimensions.dart';
 import 'package:pici_nft/core/utils/app_strings.dart';
+import 'package:pici_nft/features/solana/presentation/cubit/phantom_wallet_cubit.dart';
 
 import '../../../core/routes.dart';
+import '../../../core/utils/ui_utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,7 +24,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
+    watchWalletStates(context.read<PhantomWalletCubit>().state);
+
     super.initState();
+  }
+
+  void watchWalletStates(PhantomWalletState state) {
+    if (state is PhantomWalletConnected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        UiUtils.navigatorKey.currentState!.pushReplacementNamed(Routes.solana);
+      });
+    } else if (state is PhantomWalletSignAndSendTransaction) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        UiUtils.navigatorKey.currentState!.pop(context);
+      });
+    } else if (state is PhantomWalletFailure) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        UiUtils.navigatorKey.currentState!.pop(context);
+      });
+    }
   }
 
   @override
@@ -64,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       width: 150,
       child: ElevatedButton(
-        onPressed: () => Navigator.of(context).pushNamed(Routes.solana),
+        onPressed: () => context.read<PhantomWalletCubit>().connectWallet(),
         child: const Text(AppStrings.solanaChain),
       ),
     );
