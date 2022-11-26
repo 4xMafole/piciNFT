@@ -13,9 +13,9 @@ import '../../domain/NFT_attribute_entity.dart';
 @immutable
 abstract class Web3StorageState {}
 
-class Web3StorageInitial extends Web3StorageState {}
+class Web3StorageImageInitial extends Web3StorageState {}
 
-class Web3StorageInProgress extends Web3StorageState {}
+class Web3StorageImageInProgress extends Web3StorageState {}
 
 class Web3StorageDataInProgress extends Web3StorageState {}
 
@@ -29,23 +29,28 @@ class Web3StorageDataSuccess extends Web3StorageState {
   Web3StorageDataSuccess(this.data);
 }
 
-class Web3StorageFailure extends Web3StorageState {
+class Web3StorageImageFailure extends Web3StorageState {
   final String message;
-  Web3StorageFailure(this.message);
+  Web3StorageImageFailure(this.message);
+}
+
+class Web3StorageDataFailure extends Web3StorageState {
+  final String message;
+  Web3StorageDataFailure(this.message);
 }
 
 class Web3StorageCubit extends Cubit<Web3StorageState> {
   final Web3StorageRepository _repository;
   NFTEntity? data;
 
-  Web3StorageCubit(this._repository) : super(Web3StorageInitial());
+  Web3StorageCubit(this._repository) : super(Web3StorageImageInitial());
 
   void uploadImage({File? image}) async {
-    emit(Web3StorageInProgress());
+    emit(Web3StorageImageInProgress());
     _repository
         .uploadImage(image)
         .then((value) => emit(Web3StorageImageSuccess(value)))
-        .catchError((e) => emit(Web3StorageFailure(e.toString())));
+        .catchError((e) => emit(Web3StorageImageFailure(e.toString())));
   }
 
   void uploadData(
@@ -65,7 +70,7 @@ class Web3StorageCubit extends Cubit<Web3StorageState> {
     _repository.uploadData(data!).then((dataUrl) {
       emit(Web3StorageDataSuccess(dataUrl));
     }).catchError((e) {
-      emit(Web3StorageFailure(e.toString()));
+      emit(Web3StorageDataFailure(e.toString()));
     });
   }
 

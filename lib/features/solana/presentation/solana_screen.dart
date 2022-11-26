@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,7 @@ class _SolanaScreenState extends State<SolanaScreen> {
     return BlocConsumer<Web3StorageCubit, Web3StorageState>(
         bloc: context.read<Web3StorageCubit>(),
         listener: (context, state) {
-          if (state is Web3StorageFailure) {
+          if (state is Web3StorageImageFailure) {
             // _showSnackBar(context, state.errorMessage, 'error');
             print(state.message);
           }
@@ -168,55 +169,223 @@ class _SolanaScreenState extends State<SolanaScreen> {
   }
 
   _buildUploadImageContainer(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * (0.5),
-      height: MediaQuery.of(context).size.width * (0.5),
-      child: LayoutBuilder(builder: (context, constraints) {
-        return Stack(
-          children: [
-            Container(
+    return BlocBuilder<Web3StorageCubit, Web3StorageState>(
+        bloc: context.read<Web3StorageCubit>(),
+        builder: (context, state) {
+          if (state is Web3StorageImageInitial) {
+            return SizedBox(
               width: MediaQuery.of(context).size.width * (0.5),
               height: MediaQuery.of(context).size.width * (0.5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.grey.shade200,
-                shape: BoxShape.rectangle,
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(constraints.maxWidth * (0.15)),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                  child: GestureDetector(
-                    onTap: () =>
-                        context.read<Web3StorageCubit>().getImageFromGallery(),
-                    child: Container(
-                      alignment: Alignment.center,
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * (0.5),
+                      height: MediaQuery.of(context).size.width * (0.5),
                       decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .backgroundColor
-                              .withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(
-                              constraints.maxWidth * (0.15))),
-                      height: constraints.maxWidth * (0.3),
-                      width: constraints.maxWidth * (0.3),
-                      child: Icon(
-                        Icons.add_a_photo,
-                        color: Theme.of(context).primaryColor,
-                        size: 20.0,
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey.shade200,
+                        shape: BoxShape.rectangle,
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
-      }),
-    );
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            constraints.maxWidth * (0.15)),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          child: GestureDetector(
+                            onTap: () => context
+                                .read<Web3StorageCubit>()
+                                .getImageFromGallery(),
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .backgroundColor
+                                      .withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(
+                                      constraints.maxWidth * (0.15))),
+                              height: constraints.maxWidth * (0.3),
+                              width: constraints.maxWidth * (0.3),
+                              child: Icon(
+                                Icons.add_a_photo,
+                                color: Theme.of(context).primaryColor,
+                                size: 20.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            );
+          } else if (state is Web3StorageImageInProgress) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width * (0.5),
+              height: MediaQuery.of(context).size.width * (0.5),
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * (0.5),
+                      height: MediaQuery.of(context).size.width * (0.5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey.shade200,
+                        shape: BoxShape.rectangle,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            constraints.maxWidth * (0.15)),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .backgroundColor
+                                    .withOpacity(0.7),
+                                borderRadius: BorderRadius.circular(
+                                    constraints.maxWidth * (0.15))),
+                            height: constraints.maxWidth * (0.3),
+                            width: constraints.maxWidth * (0.3),
+                            child: const CircularProgressIndicator(
+                                color: Color.fromARGB(129, 255, 255, 255)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            );
+          } else if (state is Web3StorageImageSuccess) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width * (0.5),
+              height: MediaQuery.of(context).size.width * (0.5),
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * (0.5),
+                      height: MediaQuery.of(context).size.width * (0.5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey.shade200,
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: CachedNetworkImageProvider(state.data)),
+                        shape: BoxShape.rectangle,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            constraints.maxWidth * (0.15)),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          child: GestureDetector(
+                            onTap: () => context
+                                .read<Web3StorageCubit>()
+                                .getImageFromGallery(),
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .backgroundColor
+                                      .withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(
+                                      constraints.maxWidth * (0.15))),
+                              height: constraints.maxWidth * (0.3),
+                              width: constraints.maxWidth * (0.3),
+                              child: Icon(
+                                Icons.add_a_photo,
+                                color: Theme.of(context).primaryColor,
+                                size: 20.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            );
+          } else if (state is Web3StorageImageFailure) {
+            return SizedBox(
+              width: MediaQuery.of(context).size.width * (0.5),
+              height: MediaQuery.of(context).size.width * (0.5),
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * (0.5),
+                      height: MediaQuery.of(context).size.width * (0.5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey.shade200,
+                        shape: BoxShape.rectangle,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Builder(builder: (_) {
+                        return Text(
+                          state.message,
+                          style: TextStyle(
+                            color: Colors.red.shade300,
+                          ),
+                        );
+                      }),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                            constraints.maxWidth * (0.15)),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          child: GestureDetector(
+                            onTap: () => context
+                                .read<Web3StorageCubit>()
+                                .getImageFromGallery(),
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.add_a_photo,
+                                color: Theme.of(context).primaryColor,
+                                size: 20.0,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .backgroundColor
+                                      .withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(
+                                      constraints.maxWidth * (0.15))),
+                              height: constraints.maxWidth * (0.3),
+                              width: constraints.maxWidth * (0.3),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }),
+            );
+          }
+
+          return const Center();
+        });
   }
 
   Widget _buildAttributes(BuildContext context) {
@@ -339,7 +508,6 @@ class _SolanaScreenState extends State<SolanaScreen> {
           const SizedBox(
             height: 20,
           ),
-
           BlocBuilder(
               bloc: context.read<PhantomWalletCubit>(),
               builder: (context, state) {
@@ -357,7 +525,8 @@ class _SolanaScreenState extends State<SolanaScreen> {
                     );
                   }
                 } else if (state is PhantomWalletFailure) {
-                  if (state.errorMessage.contains(AppStrings.walletConnectError)) {
+                  if (state.errorMessage
+                      .contains(AppStrings.walletConnectError)) {
                     return TextButton(
                       onPressed: () =>
                           context.read<PhantomWalletCubit>().connectWallet(),
