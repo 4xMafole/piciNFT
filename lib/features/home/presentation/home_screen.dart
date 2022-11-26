@@ -5,6 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:pici_nft/core/utils/app_dimensions.dart';
 import 'package:pici_nft/core/utils/app_strings.dart';
 
+import '../../../core/routes.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -38,11 +40,32 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              //TODO - Add some block of code here
-              //ANCHOR - Like connecting to the wallet.
+              _buildChainButtons(context),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  _buildChainButtons(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * (0.8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildSolanaButton(context),
+        ],
+      ),
+    );
+  }
+
+  _buildSolanaButton(BuildContext context) {
+    return SizedBox(
+      width: 150,
+      child: ElevatedButton(
+        onPressed: () => Navigator.of(context).pushNamed(Routes.solana),
+        child: const Text(AppStrings.solanaChain),
       ),
     );
   }

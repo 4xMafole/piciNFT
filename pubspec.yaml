@@ -14,6 +14,16 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
+  web3_storage: ^0.0.1
+  solana: ^0.26.3
+  path_provider: ^2.0.11
+  permission_handler: ^10.2.0
+  phantom_connect: ^0.0.8
+  uni_links: ^0.5.1
+  url_launcher: ^6.1.6
+  image_picker: ^0.8.6
+  file_picker: ^5.2.2
+  connectivity_plus: ^2.3.9
 
 dev_dependencies:
   flutter_lints: ^2.0.0
