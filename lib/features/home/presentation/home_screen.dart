@@ -47,21 +47,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Center(
-        child: Text(AppStrings.appTitle),
-      )),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Container(
+    return Container(
+      color: Colors.white,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.transparent,
+        body: Container(
           padding: const EdgeInsets.all(AppDimensions.paddingAll),
           margin: const EdgeInsets.all(AppDimensions.marginAll),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildChainButtons(context),
+              const Text(
+                AppStrings.appTitle,
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * (0.1),
+              ),
+
+              SizedBox(
+                height: MediaQuery.of(context).size.height * (0.2),
+              ),
+              _buildChainButtons(context)
+              // _buildChainButtons(context),
             ],
           ),
         ),
@@ -73,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       width: MediaQuery.of(context).size.width * (0.8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _buildSolanaButton(context),
         ],
@@ -83,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildSolanaButton(BuildContext context) {
     return SizedBox(
-      width: 150,
+      width: MediaQuery.of(context).size.width * 0.5,
+      height: 50,
       child: ElevatedButton(
         onPressed: () => context.read<PhantomWalletCubit>().connectWallet(),
         child: const Text(AppStrings.solanaChain),

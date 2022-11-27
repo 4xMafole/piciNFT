@@ -29,7 +29,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.11.0
   flutter_native_splash: ^2.2.15
-  scaffold_gradient_background: ^1.0.3+1 
+  scaffold_gradient_background: ^1.0.3
   flutter_test:
     sdk: flutter
 

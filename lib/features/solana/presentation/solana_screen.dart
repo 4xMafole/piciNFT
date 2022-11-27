@@ -390,7 +390,56 @@ class _SolanaScreenState extends State<SolanaScreen> {
             );
           }
 
-          return const Center();
+          return SizedBox(
+            width: MediaQuery.of(context).size.width * (0.5),
+            height: MediaQuery.of(context).size.width * (0.5),
+            child: LayoutBuilder(builder: (context, constraints) {
+              return Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * (0.5),
+                    height: MediaQuery.of(context).size.width * (0.5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.grey.shade200,
+                      shape: BoxShape.rectangle,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(constraints.maxWidth * (0.15)),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                        child: GestureDetector(
+                          onTap: () => context
+                              .read<Web3StorageCubit>()
+                              .getImageFromGallery(),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .backgroundColor
+                                    .withOpacity(0.7),
+                                borderRadius: BorderRadius.circular(
+                                    constraints.maxWidth * (0.15))),
+                            height: constraints.maxWidth * (0.3),
+                            width: constraints.maxWidth * (0.3),
+                            child: Icon(
+                              Icons.add_a_photo,
+                              color: Theme.of(context).primaryColor,
+                              size: 20.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }),
+          );
         });
   }
 
@@ -524,7 +573,7 @@ class _SolanaScreenState extends State<SolanaScreen> {
                     child: CircularProgressIndicator(),
                   );
                 } else if (state is PhantomWalletSignAndSendTransaction) {
-                  if (state.signCounter == 5) {
+                  if (state.signCounter == 4) {
                     return const Text(
                       AppStrings.mintSuccessString,
                       style: TextStyle(color: Colors.green),

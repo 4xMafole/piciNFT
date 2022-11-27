@@ -116,9 +116,6 @@ class PhantomWalletCubit extends Cubit<PhantomWalletState> {
                 _createNFT();
               } else if (_signCounter == 3) {
                 _createMetadataAccount();
-              } else if (_signCounter == 4) {
-                // _removeMintAuthority(); MUTED
-                emit(PhantomWalletSuccess("NFT Minted Successfully!"));
               }
 
               emit(PhantomWalletSignAndSendTransaction(data, _signCounter));
@@ -173,7 +170,7 @@ class PhantomWalletCubit extends Cubit<PhantomWalletState> {
     _signCounter = 0;
     emit(PhantomWalletSignAndSendTransaction(null, _signCounter));
   }
-  
+
   /**
    * Colors:
    * Logo: l #1E7F00, C #1E9CD7, R #005B97

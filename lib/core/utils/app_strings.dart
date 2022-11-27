@@ -3,7 +3,7 @@ class AppStrings {
 
   static const String appTitle = "PiciNFT";
 
-  static const String solanaChain = "Create on Solana";
+  static const String solanaChain = "Connect to Wallet";
 
   static const String attributeString = "Attributes";
 
