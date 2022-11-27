@@ -1,13 +1,13 @@
 <h1 align="center">PiciNFT</h1>
 
-<p align="center">
+<!-- <p align="center">
   <img src="https://user-images.githubusercontent.com/56643117/189768647-86da362e-21cc-42a4-86f4-be379e572ca6.png" align="center" alt="Logo" width="150" height="150">
- </p>
+ </p> -->
  
  <p align="center"><b>Empowering artists art-work through NFTs✨</b> Made on<br> <a href="https://solana.com/">Solana</a> chain (Developer Network).
 <br><br>
-    <a href="#">View Demo</a>
-    ·
+    <!-- <a href="#">View Demo</a>
+    · -->
     <a href="https://github.com/4xMafole/piciNFT/issues">Report Bug</a>
     ·
     <a href="https://github.com/4xMafole/piciNFT/issues">Request Feature</a>
