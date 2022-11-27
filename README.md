@@ -45,9 +45,9 @@ _PiciNFT_ will demonstrate their artistic abilities by swiftly converting an ima
 
 ## 🤝 Team 
 - [Erick Mafole](https://4xmafole.github.io/) - Team lead & Web 3.0 Developer
-- [Magreth David]() -
-- [Jolly]() -
-- [Erick]() - 
+- [Magreth David]() - UI/UX Designer
+- [Evarada Peter]() - UI/UX Designer
+- [Erick Samwel]() - Backend Developer
 ## 🙏Thank you
 
 
